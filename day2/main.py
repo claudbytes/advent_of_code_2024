@@ -5,6 +5,8 @@ def read_input_and_check_levels(input_file: str) -> int:
             level_list = [int(num) for num in level.strip().split(" ")]
             if is_level_safe(level_list):
                 safe_count += 1
+            elif can_be_safe_with_one_removal(level_list):
+                safe_count += 1
     return safe_count
 
 
@@ -34,7 +36,16 @@ def is_level_safe(level_list: list[int]) -> bool:
             increasing = False
     return increasing or decreasing
 
-
+def can_be_safe_with_one_removal(level_list: list[int]) -> bool:
+    """
+    This function checks if the level list can be made safe by removing a single level.
+    """
+    # Try removing each level and check if the remaining list is safe
+    for idx in range(len(level_list)):
+        new_level_list = level_list[:idx] + level_list[idx + 1:]
+        if is_level_safe(new_level_list):
+            return True
+    return False
 
 def main() -> None:
     safe_count = read_input_and_check_levels("input.txt")
